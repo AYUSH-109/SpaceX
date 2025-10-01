@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { Navbar } from "@/components/Navbar";
 import { PenTool, Bookmark, Download, Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,7 +7,6 @@ import { toast } from "sonner";
 import OpenSeadragon from "openseadragon";
 
 const Viewer = () => {
-  const [user] = useState(null);
   const [activeTool, setActiveTool] = useState(null);
   const [annotations, setAnnotations] = useState([]);
   const [bookmarks, setBookmarks] = useState([]);
@@ -94,9 +92,7 @@ const Viewer = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <Navbar user={user} />
-      
-      <div className="flex-1 flex pt-16">
+      <div className="flex-1 flex">
         {/* Sidebar */}
         <div className="w-80 bg-card border-r border-border p-4 overflow-y-auto">
           <h2 className="text-xl font-bold mb-4 text-primary">Explorer Panel</h2>
