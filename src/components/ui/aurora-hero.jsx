@@ -38,7 +38,7 @@ export const AuroraHero = ({ title, subtitle, buttonText, onButtonClick }) => {
         <span className="mb-1.5 inline-block rounded-full bg-muted/50 px-3 py-1.5 text-sm backdrop-blur-sm">
           Explore the Moon
         </span>
-        <h1 className="max-w-3xl bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-center text-3xl font-bold leading-tight text-transparent sm:text-5xl sm:leading-tight md:text-7xl md:leading-tight">
+        <h1 className="max-w-3xl mt-8 bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-center text-3xl font-bold leading-tight text-transparent sm:text-5xl sm:leading-tight md:text-7xl md:leading-tight">
           {title || "Interactive Lunar Map Explorer"}
         </h1>
         <p className="my-6 max-w-xl text-center text-base leading-relaxed text-muted-foreground md:text-lg md:leading-relaxed">
