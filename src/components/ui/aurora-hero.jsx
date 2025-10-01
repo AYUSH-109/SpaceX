@@ -56,10 +56,9 @@ export const AuroraHero = ({ title, subtitle, buttonText, onButtonClick }) => {
             scale: 0.985,
           }}
           onClick={onButtonClick}
-          className="group relative flex w-fit items-center gap-1.5 rounded-full bg-background/10 px-6 py-3 text-foreground transition-colors hover:bg-background/20 backdrop-blur-sm"
+          className="group relative flex items-center justify-center w-fit rounded-full bg-background/10 px-8 py-3 text-foreground transition-colors hover:bg-background/20 backdrop-blur-sm"
         >
           {buttonText || "Start Exploring"}
-          <FiArrowRight className="transition-transform group-hover:-rotate-45 group-active:-rotate-12" />
         </motion.button>
       </div>
 
