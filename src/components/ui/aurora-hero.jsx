@@ -32,7 +32,7 @@ export const AuroraHero = ({ title, subtitle, buttonText, onButtonClick }) => {
       style={{
         backgroundImage,
       }}
-      className="relative grid min-h-screen place-content-center overflow-hidden bg-background px-4 py-24 text-foreground"
+      className="relative grid min-h-screen place-content-center overflow-hidden bg-background px-4 py-24 pt-32 text-foreground"
     >
       <div className="relative z-10 flex flex-col items-center">
         <span className="mb-1.5 inline-block rounded-full bg-muted/50 px-3 py-1.5 text-sm backdrop-blur-sm">
