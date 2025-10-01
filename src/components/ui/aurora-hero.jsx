@@ -41,7 +41,7 @@ export const AuroraHero = ({ title, subtitle, buttonText, onButtonClick }) => {
         <h1 className="max-w-3xl mt-8 bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-center text-3xl font-bold leading-tight text-transparent sm:text-5xl sm:leading-tight md:text-7xl md:leading-tight">
           {title || "Interactive Lunar Map Explorer"}
         </h1>
-        <p className="my-6 max-w-xl text-center text-base leading-relaxed text-muted-foreground md:text-lg md:leading-relaxed">
+        <p className="mt-6 mb-10 max-w-xl text-center text-base leading-relaxed text-muted-foreground md:text-lg md:leading-relaxed">
           {subtitle || "Navigate the lunar surface with precision. Annotate discoveries, bookmark locations, and download high-resolution images."}
         </p>
         <motion.button
