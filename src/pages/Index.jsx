@@ -13,34 +13,36 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navbar user={user} />
       
-      <div className="relative">
-        <div className="absolute inset-0 z-0">
+      <div className="relative min-h-screen">
+        <div className="fixed inset-0 z-0">
           <SpiralAnimation />
         </div>
         
-        <ShootingStars
-          starColor="#9E00FF"
-          trailColor="#2EB9DF"
-          minSpeed={15}
-          maxSpeed={35}
-          minDelay={1000}
-          maxDelay={3000}
-        />
-        <ShootingStars
-          starColor="#FF0099"
-          trailColor="#FFB800"
-          minSpeed={10}
-          maxSpeed={25}
-          minDelay={2000}
-          maxDelay={4000}
-        />
-        
-        <AuroraHero
-          title="Interactive Lunar Map Explorer"
-          subtitle="Navigate the lunar surface with precision. Annotate discoveries, bookmark locations, and download high-resolution images."
-          buttonText="Start Exploring"
-          onButtonClick={() => navigate("/viewer")}
-        />
+        <div className="relative z-10">
+          <ShootingStars
+            starColor="#FFFFFF"
+            trailColor="#CCCCCC"
+            minSpeed={15}
+            maxSpeed={35}
+            minDelay={1000}
+            maxDelay={3000}
+          />
+          <ShootingStars
+            starColor="#DDDDDD"
+            trailColor="#AAAAAA"
+            minSpeed={10}
+            maxSpeed={25}
+            minDelay={2000}
+            maxDelay={4000}
+          />
+          
+          <AuroraHero
+            title="Interactive Lunar Map Explorer"
+            subtitle="Navigate the lunar surface with precision. Annotate discoveries, bookmark locations, and download high-resolution images."
+            buttonText="Start Exploring"
+            onButtonClick={() => navigate("/viewer")}
+          />
+        </div>
       </div>
     </div>
   );
