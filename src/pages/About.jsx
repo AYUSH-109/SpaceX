@@ -1,11 +1,7 @@
-import { Navbar } from "@/components/Navbar";
 import { ShootingStars } from "@/components/ui/shooting-stars";
 import { Telescope, MapPin, Download, Bookmark } from "lucide-react";
-import { useState } from "react";
 
 const About = () => {
-  const [user] = useState(null);
-
   const features = [
     {
       icon: Telescope,
@@ -31,7 +27,6 @@ const About = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar user={user} />
       <ShootingStars
         starColor="#9E00FF"
         trailColor="#2EB9DF"
@@ -39,7 +34,7 @@ const About = () => {
         maxSpeed={35}
       />
       
-      <div className="relative z-10 container mx-auto px-4 pt-32 pb-16">
+      <div className="relative z-10 container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-6xl font-bold text-center mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             About LunarScope
