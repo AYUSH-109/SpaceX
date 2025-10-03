@@ -57,13 +57,13 @@ const About = () => {
             ))}
           </div>
 
-          <div className="mt-16 bg-card border border-border rounded-lg p-8">
-            <h2 className="text-2xl font-bold mb-4">Technology</h2>
-            <p className="text-muted-foreground mb-4">
+          <div className="mt-16 bg-card border border-border rounded-lg p-8 text-left">
+            <h2 className="text-2xl font-bold mb-4 text-left">Technology</h2>
+            <p className="text-muted-foreground mb-4 text-left leading-relaxed">
               LunarScope uses OpenSeadragon for smooth, high-performance image viewing. 
               Our tiled image system ensures fast loading times even for massive lunar map datasets.
             </p>
-            <p className="text-muted-foreground">
+            <p className="text-muted-foreground text-left leading-relaxed">
               Built with modern web technologies including React, Framer Motion for smooth animations, 
               and Three.js for immersive visual effects.
             </p>
