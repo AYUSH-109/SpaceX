@@ -6,28 +6,27 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Mail } from "lucide-react";
 import { toast } from "sonner";
-
 const Auth = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     // This will be connected to Lovable Cloud authentication
     toast.success(isLogin ? "Logged in successfully!" : "Account created!");
     // Store user data in localStorage for demo
-    localStorage.setItem('user', JSON.stringify({ email, username: email.split('@')[0] }));
+    localStorage.setItem('user', JSON.stringify({
+      email,
+      username: email.split('@')[0]
+    }));
     navigate("/");
   };
-
-  return (
-    <div className="min-h-screen bg-background flex items-center justify-center">
+  return <div className="min-h-screen bg-background flex items-center justify-center">
       <ShootingStars starColor="#9E00FF" trailColor="#2EB9DF" />
       
       <div className="relative z-10 w-full max-w-sm px-4">
-        <div className="bg-card border border-border rounded-2xl p-6 backdrop-blur-sm">
+        <div className="bg-card border border-border rounded-2xl p-6 backdrop-blur-sm px-[240px] py-[24px]">
           <h2 className="text-2xl font-bold text-center mb-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
               {isLogin ? "Welcome Back" : "Join LunarScope"}
             </h2>
@@ -36,30 +35,14 @@ const Auth = () => {
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
+              <div className="space-y-2 px-0">
                 <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="you@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="bg-background/50"
-                />
+                <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={e => setEmail(e.target.value)} required className="bg-background/50" />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="bg-background/50"
-                />
+                <Input id="password" type="password" placeholder="••••••••" value={password} onChange={e => setPassword(e.target.value)} required className="bg-background/50" />
               </div>
 
             <div className="flex justify-center">
@@ -70,10 +53,7 @@ const Auth = () => {
           </form>
 
           <div className="mt-4 text-center">
-            <button
-              onClick={() => setIsLogin(!isLogin)}
-              className="text-sm text-muted-foreground hover:text-primary transition-colors"
-            >
+            <button onClick={() => setIsLogin(!isLogin)} className="text-sm text-muted-foreground hover:text-primary transition-colors">
               {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
             </button>
           </div>
@@ -87,8 +67,6 @@ const Auth = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Auth;
