@@ -3,15 +3,27 @@ import { AuroraHero } from "@/components/ui/aurora-hero";
 import { ShootingStars } from "@/components/ui/shooting-stars";
 import { SpiralAnimation } from "@/components/ui/spiral-animation";
 import { Navbar } from "@/components/Navbar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const Index = () => {
   const navigate = useNavigate();
-  const [user] = useState(null); // Will be connected to auth later
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+  };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar user={user} />
+    <div className="min-h-screen bg-background overflow-hidden">
+      <Navbar user={user} onLogout={handleLogout} />
       
       <div className="relative min-h-screen">
         <div className="fixed inset-0 z-0">

@@ -17,7 +17,9 @@ const Auth = () => {
     e.preventDefault();
     // This will be connected to Lovable Cloud authentication
     toast.success(isLogin ? "Logged in successfully!" : "Account created!");
-    navigate("/viewer");
+    // Store user data in localStorage for demo
+    localStorage.setItem('user', JSON.stringify({ email, username: email.split('@')[0] }));
+    navigate("/");
   };
 
   return (
