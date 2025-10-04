@@ -39,12 +39,11 @@ export const Navbar = ({ user, onLogout }) => {
                   <div className="px-4 py-2 border-b border-border">
                     <p className="text-sm font-medium">{user.email}</p>
                   </div>
-                  <button className="w-full text-left px-4 py-2 hover:bg-muted text-sm">
-                    Change Username
-                  </button>
-                  <button className="w-full text-left px-4 py-2 hover:bg-muted text-sm">
-                    Update Photo
-                  </button>
+                  <Link to="/profile">
+                    <button className="w-full text-left px-4 py-2 hover:bg-muted text-sm">
+                      View Profile
+                    </button>
+                  </Link>
                   <button
                     onClick={onLogout}
                     className="w-full text-left px-4 py-2 hover:bg-muted text-sm text-destructive"

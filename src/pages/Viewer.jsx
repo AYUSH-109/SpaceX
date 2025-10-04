@@ -17,8 +17,9 @@ const Viewer = () => {
   const [selectedCircle, setSelectedCircle] = useState(null);
   const [editingLabel, setEditingLabel] = useState(null);
   const [labelText, setLabelText] = useState("");
-  const [dragMode, setDragMode] = useState(null); // 'move' or 'resize'
+  const [dragMode, setDragMode] = useState(null);
   const [dragStart, setDragStart] = useState(null);
+  const [viewportBounds, setViewportBounds] = useState(null);
   
   const viewerRef = useRef(null);
   const osdRef = useRef(null);
@@ -47,6 +48,14 @@ const Viewer = () => {
           clickToZoom: false
         }
       });
+
+      // Listen to viewport changes
+      osdRef.current.addHandler('animation', () => {
+        redrawAnnotations();
+      });
+      osdRef.current.addHandler('resize', () => {
+        redrawAnnotations();
+      });
     }
 
     return () => {
@@ -66,6 +75,20 @@ const Viewer = () => {
       redrawAnnotations();
     }
   }, [annotations, currentCircle]);
+
+  // Convert viewport coordinates to pixel coordinates
+  const viewportToPixel = (point) => {
+    if (!osdRef.current) return point;
+    const viewportPoint = osdRef.current.viewport.pointFromPixel(new OpenSeadragon.Point(point.x, point.y));
+    return { x: viewportPoint.x, y: viewportPoint.y };
+  };
+
+  // Convert pixel coordinates to viewport coordinates
+  const pixelToViewport = (point) => {
+    if (!osdRef.current) return point;
+    const pixelPoint = osdRef.current.viewport.pixelFromPoint(new OpenSeadragon.Point(point.x, point.y));
+    return { x: pixelPoint.x, y: pixelPoint.y };
+  };
 
   const getMousePos = (e) => {
     const rect = overlayRef.current.getBoundingClientRect();
@@ -98,27 +121,35 @@ const Viewer = () => {
   const handleMouseDown = (e) => {
     if (activeTool !== 'annotate') return;
     
-    const pos = getMousePos(e);
+    const pixelPos = getMousePos(e);
+    const viewportPos = viewportToPixel(pixelPos);
     
-    // Check if clicking on existing circle
-    const clickedCircle = annotations.find(ann => isPointInCircle(pos, ann));
+    // Check if clicking on existing circle (convert annotations to pixel space for comparison)
+    const clickedCircle = annotations.find(ann => {
+      const pixelCenter = pixelToViewport(ann);
+      const pixelRadius = ann.radius * osdRef.current.viewport.getZoom();
+      return isPointInCircle(pixelPos, { centerX: pixelCenter.x, centerY: pixelCenter.y, radius: pixelRadius });
+    });
     
     if (clickedCircle) {
-      if (isPointOnCircleEdge(pos, clickedCircle)) {
+      const pixelCenter = pixelToViewport(clickedCircle);
+      const pixelRadius = clickedCircle.radius * osdRef.current.viewport.getZoom();
+      
+      if (isPointOnCircleEdge(pixelPos, { centerX: pixelCenter.x, centerY: pixelCenter.y, radius: pixelRadius })) {
         setDragMode('resize');
         setSelectedCircle(clickedCircle);
-        setDragStart(pos);
+        setDragStart(viewportPos);
       } else {
         setDragMode('move');
         setSelectedCircle(clickedCircle);
-        setDragStart(pos);
+        setDragStart(viewportPos);
       }
     } else {
-      // Start drawing new circle
+      // Start drawing new circle in viewport coordinates
       setIsDrawing(true);
       setCurrentCircle({
-        centerX: pos.x,
-        centerY: pos.y,
+        x: viewportPos.x,
+        y: viewportPos.y,
         radius: 0
       });
     }
@@ -127,34 +158,33 @@ const Viewer = () => {
   const handleMouseMove = (e) => {
     if (activeTool !== 'annotate') return;
     
-    const pos = getMousePos(e);
+    const pixelPos = getMousePos(e);
+    const viewportPos = viewportToPixel(pixelPos);
     
     if (isDrawing && currentCircle) {
-      const radius = calculateRadius(
-        { x: currentCircle.centerX, y: currentCircle.centerY },
-        pos
-      );
+      const dx = viewportPos.x - currentCircle.x;
+      const dy = viewportPos.y - currentCircle.y;
+      const radius = Math.sqrt(dx * dx + dy * dy);
       setCurrentCircle({ ...currentCircle, radius });
     } else if (dragMode === 'move' && selectedCircle && dragStart) {
-      const dx = pos.x - dragStart.x;
-      const dy = pos.y - dragStart.y;
+      const dx = viewportPos.x - dragStart.x;
+      const dy = viewportPos.y - dragStart.y;
       
       setAnnotations(annotations.map(ann => 
         ann.id === selectedCircle.id
-          ? { ...ann, centerX: ann.centerX + dx, centerY: ann.centerY + dy }
+          ? { ...ann, x: ann.x + dx, y: ann.y + dy }
           : ann
       ));
-      setDragStart(pos);
+      setDragStart(viewportPos);
       setSelectedCircle(prev => ({
         ...prev,
-        centerX: prev.centerX + dx,
-        centerY: prev.centerY + dy
+        x: prev.x + dx,
+        y: prev.y + dy
       }));
     } else if (dragMode === 'resize' && selectedCircle && dragStart) {
-      const newRadius = calculateRadius(
-        { x: selectedCircle.centerX, y: selectedCircle.centerY },
-        pos
-      );
+      const dx = viewportPos.x - selectedCircle.x;
+      const dy = viewportPos.y - selectedCircle.y;
+      const newRadius = Math.sqrt(dx * dx + dy * dy);
       
       setAnnotations(annotations.map(ann =>
         ann.id === selectedCircle.id
@@ -166,7 +196,7 @@ const Viewer = () => {
   };
 
   const handleMouseUp = (e) => {
-    if (isDrawing && currentCircle && currentCircle.radius > 10) {
+    if (isDrawing && currentCircle && currentCircle.radius > 0.01) {
       const newAnnotation = {
         id: Date.now(),
         ...currentCircle,
@@ -184,33 +214,39 @@ const Viewer = () => {
 
   const redrawAnnotations = () => {
     const canvas = overlayRef.current;
-    if (!canvas) return;
+    if (!canvas || !osdRef.current) return;
     
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     // Draw all saved annotations
     annotations.forEach(ann => {
+      const pixelPos = pixelToViewport(ann);
+      const pixelRadius = ann.radius * osdRef.current.viewport.getZoom();
+      
       ctx.beginPath();
-      ctx.arc(ann.centerX, ann.centerY, ann.radius, 0, 2 * Math.PI);
+      ctx.arc(pixelPos.x, pixelPos.y, pixelRadius, 0, 2 * Math.PI);
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
       ctx.lineWidth = 2;
       ctx.stroke();
       
       if (ann.label) {
         ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-        ctx.fillRect(ann.centerX - 50, ann.centerY - 15, 100, 30);
+        ctx.fillRect(pixelPos.x - 50, pixelPos.y - 15, 100, 30);
         ctx.fillStyle = 'white';
         ctx.font = '12px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText(ann.label, ann.centerX, ann.centerY + 5);
+        ctx.fillText(ann.label, pixelPos.x, pixelPos.y + 5);
       }
     });
     
     // Draw current circle being drawn
     if (currentCircle && currentCircle.radius > 0) {
+      const pixelPos = pixelToViewport(currentCircle);
+      const pixelRadius = currentCircle.radius * osdRef.current.viewport.getZoom();
+      
       ctx.beginPath();
-      ctx.arc(currentCircle.centerX, currentCircle.centerY, currentCircle.radius, 0, 2 * Math.PI);
+      ctx.arc(pixelPos.x, pixelPos.y, pixelRadius, 0, 2 * Math.PI);
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
       ctx.lineWidth = 2;
       ctx.setLineDash([5, 5]);
@@ -355,8 +391,8 @@ const Viewer = () => {
                             <X className="h-3 w-3" />
                           </button>
                         </div>
-                        <p className="text-xs">Center: ({Math.round(ann.centerX)}, {Math.round(ann.centerY)})</p>
-                        <p className="text-xs">Radius: {Math.round(ann.radius)}px</p>
+                        <p className="text-xs">Position: ({ann.x.toFixed(3)}, {ann.y.toFixed(3)})</p>
+                        <p className="text-xs">Radius: {ann.radius.toFixed(3)}</p>
                         {ann.label && <p className="text-xs mt-1 font-medium">Label: {ann.label}</p>}
                         {!ann.label && (
                           <Button
