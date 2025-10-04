@@ -329,147 +329,149 @@ const Viewer = () => {
         >
           {isPanelOpen && (
             <div className="p-4">
-          <h2 className="text-xl font-bold mb-4 text-primary">Explorer Panel</h2>
-          
-          <div className="space-y-4">
-            {/* Image Search */}
-            <div>
-              <h3 className="font-semibold mb-2 flex items-center gap-2">
-                <Search className="h-4 w-4" />
-                Image Library
-              </h3>
-              <Input
-                placeholder="Search images..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-background/50 mb-3"
-              />
-              <div className="space-y-2 max-h-48 overflow-y-auto">
-                {filteredImages.map(img => (
-                  <button
-                    key={img.id}
-                    onClick={() => loadImage(img.url)}
-                    className="w-full p-2 bg-background/50 rounded text-sm text-left hover:bg-muted transition-colors flex items-center gap-2"
-                  >
-                    <Image className="h-4 w-4 text-muted-foreground" />
-                    {img.name}
-                  </button>
-                ))}
-              </div>
-            </div>
-            
-            <div className="border-t border-border pt-4">
-              <div>
-                <h3 className="font-semibold mb-2 flex items-center gap-2">
-                  <PenTool className="h-4 w-4" />
-                  Circle Annotation Tool
-                </h3>
-                <Button
-                  onClick={() => {
-                    setActiveTool(activeTool === 'annotate' ? null : 'annotate');
-                  }}
-                  variant={activeTool === 'annotate' ? 'default' : 'outline'}
-                  className="w-full mb-2"
-                >
-                  {activeTool === 'annotate' ? 'Disable Tool' : 'Enable Circle Tool'}
-                </Button>
+              <h2 className="text-xl font-bold mb-4 text-primary">Explorer Panel</h2>
               
-                {activeTool === 'annotate' && (
-                  <div className="space-y-2">
-                    <p className="text-xs text-muted-foreground">
-                      Click and drag to draw circles. Click inside to move, on edge to resize.
-                    </p>
-                  </div>
-                )}
-              
-                {annotations.length > 0 && (
-                  <div className="mt-2 space-y-2">
-                    <p className="text-xs text-muted-foreground mb-1">Saved Annotations:</p>
-                    {annotations.map(ann => (
-                      <div key={ann.id} className="p-2 bg-background/50 rounded text-sm">
-                        <div className="flex items-start justify-between mb-1">
-                          <p className="font-medium text-xs text-primary">Circle {ann.id}</p>
-                          <button
-                            onClick={() => handleDeleteAnnotation(ann.id)}
-                            className="text-destructive hover:text-destructive/80"
-                          >
-                            <X className="h-3 w-3" />
-                          </button>
-                        </div>
-                        <p className="text-xs">Position: ({ann.x.toFixed(3)}, {ann.y.toFixed(3)})</p>
-                        <p className="text-xs">Radius: {ann.radius.toFixed(3)}</p>
-                        {ann.label && <p className="text-xs mt-1 font-medium">Label: {ann.label}</p>}
-                        {!ann.label && (
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => {
-                              setEditingLabel(ann.id);
-                              setLabelText(ann.label || "");
-                            }}
-                            className="mt-1 h-6 text-xs"
-                          >
-                            <Edit2 className="h-3 w-3 mr-1" />
-                            Add Label
-                          </Button>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              <div className="border-t border-border pt-4 mt-4">
-                <h3 className="font-semibold mb-2 flex items-center gap-2">
-                  <Bookmark className="h-4 w-4" />
-                  My Saves
-                </h3>
-                <Button
-                  onClick={() => setActiveTool(activeTool === 'bookmark' ? null : 'bookmark')}
-                  variant={activeTool === 'bookmark' ? 'default' : 'outline'}
-                  className="w-full mb-2"
-                >
-                  {activeTool === 'bookmark' ? 'Cancel' : 'Add Bookmark'}
-                </Button>
-                
-                {activeTool === 'bookmark' && (
-                  <div className="space-y-2">
-                    <Input
-                      placeholder="Bookmark name..."
-                      value={bookmarkName}
-                      onChange={(e) => setBookmarkName(e.target.value)}
-                      className="bg-background/50"
-                    />
-                    <Button onClick={handleBookmark} className="w-full">
-                      <Save className="h-4 w-4 mr-2" />
-                      Save Bookmark
-                    </Button>
-                  </div>
-                )}
-                
-                {bookmarks.length > 0 && (
-                  <div className="mt-2 space-y-2">
-                    {bookmarks.map(bm => (
+              <div className="space-y-4">
+                {/* Image Search */}
+                <div>
+                  <h3 className="font-semibold mb-2 flex items-center gap-2">
+                    <Search className="h-4 w-4" />
+                    Image Library
+                  </h3>
+                  <Input
+                    placeholder="Search images..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="bg-background/50 mb-3"
+                  />
+                  <div className="space-y-2 max-h-48 overflow-y-auto">
+                    {filteredImages.map(img => (
                       <button
-                        key={bm.id}
-                        onClick={() => goToBookmark(bm)}
-                        className="w-full p-2 bg-background/50 rounded text-sm text-left hover:bg-muted transition-colors"
+                        key={img.id}
+                        onClick={() => loadImage(img.url)}
+                        className="w-full p-2 bg-background/50 rounded text-sm text-left hover:bg-muted transition-colors flex items-center gap-2"
                       >
-                        {bm.name}
+                        <Image className="h-4 w-4 text-muted-foreground" />
+                        {img.name}
                       </button>
                     ))}
                   </div>
-                )}
-              </div>
+                </div>
+                
+                <div className="border-t border-border pt-4">
+                  <div>
+                    <h3 className="font-semibold mb-2 flex items-center gap-2">
+                      <PenTool className="h-4 w-4" />
+                      Circle Annotation Tool
+                    </h3>
+                    <Button
+                      onClick={() => {
+                        setActiveTool(activeTool === 'annotate' ? null : 'annotate');
+                      }}
+                      variant={activeTool === 'annotate' ? 'default' : 'outline'}
+                      className="w-full mb-2"
+                    >
+                      {activeTool === 'annotate' ? 'Disable Tool' : 'Enable Circle Tool'}
+                    </Button>
+                  
+                    {activeTool === 'annotate' && (
+                      <div className="space-y-2">
+                        <p className="text-xs text-muted-foreground">
+                          Click and drag to draw circles. Click inside to move, on edge to resize.
+                        </p>
+                      </div>
+                    )}
+                  
+                    {annotations.length > 0 && (
+                      <div className="mt-2 space-y-2">
+                        <p className="text-xs text-muted-foreground mb-1">Saved Annotations:</p>
+                        {annotations.map(ann => (
+                          <div key={ann.id} className="p-2 bg-background/50 rounded text-sm">
+                            <div className="flex items-start justify-between mb-1">
+                              <p className="font-medium text-xs text-primary">Circle {ann.id}</p>
+                              <button
+                                onClick={() => handleDeleteAnnotation(ann.id)}
+                                className="text-destructive hover:text-destructive/80"
+                              >
+                                <X className="h-3 w-3" />
+                              </button>
+                            </div>
+                            <p className="text-xs">Position: ({ann.x.toFixed(3)}, {ann.y.toFixed(3)})</p>
+                            <p className="text-xs">Radius: {ann.radius.toFixed(3)}</p>
+                            {ann.label && <p className="text-xs mt-1 font-medium">Label: {ann.label}</p>}
+                            {!ann.label && (
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => {
+                                  setEditingLabel(ann.id);
+                                  setLabelText(ann.label || "");
+                                }}
+                                className="mt-1 h-6 text-xs"
+                              >
+                                <Edit2 className="h-3 w-3 mr-1" />
+                                Add Label
+                              </Button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
 
-              <div className="border-t border-border pt-4 mt-4">
-                <h3 className="font-semibold mb-2 flex items-center gap-2">
-                  <Download className="h-4 w-4" />
-                  Download Selection
-                </h3>
-                <Button onClick={handleDownload} variant="outline" className="w-full">
-                  Download Current View
-                </Button>
+                  <div className="border-t border-border pt-4 mt-4">
+                    <h3 className="font-semibold mb-2 flex items-center gap-2">
+                      <Bookmark className="h-4 w-4" />
+                      My Saves
+                    </h3>
+                    <Button
+                      onClick={() => setActiveTool(activeTool === 'bookmark' ? null : 'bookmark')}
+                      variant={activeTool === 'bookmark' ? 'default' : 'outline'}
+                      className="w-full mb-2"
+                    >
+                      {activeTool === 'bookmark' ? 'Cancel' : 'Add Bookmark'}
+                    </Button>
+                    
+                    {activeTool === 'bookmark' && (
+                      <div className="space-y-2">
+                        <Input
+                          placeholder="Bookmark name..."
+                          value={bookmarkName}
+                          onChange={(e) => setBookmarkName(e.target.value)}
+                          className="bg-background/50"
+                        />
+                        <Button onClick={handleBookmark} className="w-full">
+                          <Save className="h-4 w-4 mr-2" />
+                          Save Bookmark
+                        </Button>
+                      </div>
+                    )}
+                    
+                    {bookmarks.length > 0 && (
+                      <div className="mt-2 space-y-2">
+                        {bookmarks.map(bm => (
+                          <button
+                            key={bm.id}
+                            onClick={() => goToBookmark(bm)}
+                            className="w-full p-2 bg-background/50 rounded text-sm text-left hover:bg-muted transition-colors"
+                          >
+                            {bm.name}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="border-t border-border pt-4 mt-4">
+                    <h3 className="font-semibold mb-2 flex items-center gap-2">
+                      <Download className="h-4 w-4" />
+                      Download Selection
+                    </h3>
+                    <Button onClick={handleDownload} variant="outline" className="w-full">
+                      Download Current View
+                    </Button>
+                  </div>
+                </div>
               </div>
             </div>
           )}
