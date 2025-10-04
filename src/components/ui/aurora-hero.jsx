@@ -26,9 +26,7 @@ export const AuroraHero = ({
     backgroundImage
   }} className="relative flex items-center justify-center min-h-screen overflow-hidden bg-background px-4 pt-16 text-foreground">
       <div className="relative z-10 flex flex-col items-center">
-        <span className="mb-1.5 inline-block rounded-full bg-muted/50 px-3 text-sm backdrop-blur-sm py-[9px]">
-          Explore the Moon
-        </span>
+        <span className="mb-1.5 inline-block rounded-full bg-muted/50 px-3 text-sm backdrop-blur-sm py-[9px]">Explore the Space</span>
         <h1 className="max-w-3xl mt-8 bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-center text-3xl font-bold leading-tight text-transparent sm:text-5xl sm:leading-tight md:text-7xl md:leading-tight">
           {title || "Interactive Lunar Map Explorer"}
         </h1>
