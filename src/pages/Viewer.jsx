@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { PenTool, Bookmark, Download, Save, Search, Image, X, Edit2, Move } from "lucide-react";
+import { PenTool, Bookmark, Download, Save, Search, Image, X, Edit2, Move, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,6 +20,7 @@ const Viewer = () => {
   const [dragMode, setDragMode] = useState(null);
   const [dragStart, setDragStart] = useState(null);
   const [viewportBounds, setViewportBounds] = useState(null);
+  const [isPanelOpen, setIsPanelOpen] = useState(true);
   
   const viewerRef = useRef(null);
   const osdRef = useRef(null);
@@ -321,9 +322,13 @@ const Viewer = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <div className="flex-1 flex">
+      <div className="flex-1 flex relative">
         {/* Sidebar */}
-        <div className="w-80 bg-card border-r border-border p-4 overflow-y-auto">
+        <div 
+          className={`${isPanelOpen ? 'w-80' : 'w-0'} bg-card border-r border-border overflow-y-auto transition-all duration-300`}
+        >
+          {isPanelOpen && (
+            <div className="p-4">
           <h2 className="text-xl font-bold mb-4 text-primary">Explorer Panel</h2>
           
           <div className="space-y-4">
@@ -468,7 +473,19 @@ const Viewer = () => {
               </div>
             </div>
           </div>
+          )}
         </div>
+
+        {/* Toggle Button */}
+        <Button
+          onClick={() => setIsPanelOpen(!isPanelOpen)}
+          variant="outline"
+          size="icon"
+          className="absolute left-0 top-4 z-50 transition-all duration-300 bg-card shadow-lg"
+          style={{ left: isPanelOpen ? '320px' : '0px' }}
+        >
+          {isPanelOpen ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+        </Button>
 
         {/* Main Viewer */}
         <div className="flex-1 relative bg-background">
