@@ -472,7 +472,6 @@ const Viewer = () => {
                 </Button>
               </div>
             </div>
-          </div>
           )}
         </div>
 
