@@ -23,9 +23,7 @@ const About = () => {
       
       <div className="relative z-10 container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl md:text-6xl font-bold text-center mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            About LunarScope
-          </h1>
+          <h1 className="text-4xl md:text-6xl font-bold text-center mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">About SpaceScope</h1>
           <p className="text-lg text-muted-foreground text-center mb-16 py-[2px]">
             Our mission is to make lunar exploration accessible to everyone. Whether you're a researcher, 
             educator, or space enthusiast, LunarScope provides powerful tools to explore and study the Moon.
